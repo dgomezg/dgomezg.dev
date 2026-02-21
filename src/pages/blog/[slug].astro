@@ -1,0 +1,62 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+<Layout title={post.data.title}>
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 bg-white shadow-lg rounded-lg my-8">
+        <article class="prose lg:prose-xl mx-auto">
+            <header class="mb-8 border-b pb-4">
+                <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight mb-2">
+                    {post.data.title}
+                </h1>
+                <div class="flex items-center space-x-4 text-sm text-gray-500">
+                     <time datetime={post.data.date.toISOString()}>
+                        {post.data.date.toLocaleDateString(undefined, {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        })}
+                    </time>
+                    <span class="text-gray-300">|</span>
+                    <span class={`font-medium ${post.data.language === 'en' ? 'text-blue-600' : 'text-green-600'}`}>
+                        {post.data.language === 'en' ? 'English' : 'Español'}
+                    </span>
+                    {post.data.tags && (
+                        <>
+                             <span class="text-gray-300">|</span>
+                             <div class="flex space-x-2">
+                                {post.data.tags.map((tag: string) => (
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                        #{tag}
+                                    </span>
+                                ))}
+                             </div>
+                        </>
+                    )}
+                </div>
+            </header>
+            
+            <div class="prose-indigo">
+                <Content />
+            </div>
+
+            <footer class="mt-12 pt-6 border-t border-gray-200">
+                <a href="/blog" class="text-indigo-600 hover:text-indigo-800 font-medium flex items-center">
+                    &larr; Back to Blog
+                </a>
+            </footer>
+        </article>
+    </div>
+</Layout>
