@@ -26,6 +26,16 @@ const talksCollection = defineCollection({
     }),
 });
 
+const conferencesCollection = defineCollection({
+    type: 'content',
+    schema: z.object({
+        title: z.string(),
+        event: z.string(),
+        date: z.string(),
+        location: z.string(),
+    }),
+});
+
 const blogCollection = defineCollection({
     type: 'content',
     schema: z.object({
@@ -40,5 +50,6 @@ const blogCollection = defineCollection({
 export const collections = {
     'experience': experienceCollection,
     'talks': talksCollection,
+    'conferences': conferencesCollection,
     'blog': blogCollection,
 };

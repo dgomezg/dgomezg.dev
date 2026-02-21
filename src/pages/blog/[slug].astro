@@ -15,48 +15,57 @@ const { Content } = await post.render();
 ---
 
 <Layout title={post.data.title}>
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 bg-white shadow-lg rounded-lg my-8">
-        <article class="prose lg:prose-xl mx-auto">
-            <header class="mb-8 border-b pb-4">
-                <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight mb-2">
-                    {post.data.title}
-                </h1>
-                <div class="flex items-center space-x-4 text-sm text-gray-500">
-                     <time datetime={post.data.date.toISOString()}>
-                        {post.data.date.toLocaleDateString(undefined, {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                        })}
-                    </time>
-                    <span class="text-gray-300">|</span>
-                    <span class={`font-medium ${post.data.language === 'en' ? 'text-blue-600' : 'text-green-600'}`}>
-                        {post.data.language === 'en' ? 'English' : 'Español'}
-                    </span>
-                    {post.data.tags && (
-                        <>
-                             <span class="text-gray-300">|</span>
-                             <div class="flex space-x-2">
-                                {post.data.tags.map((tag: string) => (
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                        #{tag}
-                                    </span>
-                                ))}
-                             </div>
-                        </>
-                    )}
-                </div>
-            </header>
-            
-            <div class="prose-indigo">
-                <Content />
+    <!-- Hero Header -->
+    <div class="relative bg-gray-900 overflow-hidden h-80">
+        <div class="absolute inset-0">
+            <img class="w-full h-full object-cover object-[0%_80%] opacity-80" src="/talks-header-2.jpg" alt="Blog Header" />
+            <div class="absolute inset-0 bg-gray-900 mix-blend-multiply opacity-50" aria-hidden="true"></div>
+        </div>
+        <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center text-center">
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white mb-4">
+                {post.data.title}
+            </h1>
+            <div class="flex items-center justify-center space-x-4 text-sm text-indigo-200">
+                <time datetime={post.data.date.toISOString()}>
+                    {post.data.date.toLocaleDateString(undefined, {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    })}
+                </time>
+                <span class="text-indigo-400">•</span>
+                <span class="font-medium text-indigo-200">
+                    {post.data.language === 'en' ? 'English' : 'Español'}
+                </span>
             </div>
+        </div>
+    </div>
 
-            <footer class="mt-12 pt-6 border-t border-gray-200">
-                <a href="/blog" class="text-indigo-600 hover:text-indigo-800 font-medium flex items-center">
-                    &larr; Back to Blog
-                </a>
-            </footer>
-        </article>
+    <!-- Content -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-20 relative z-10 mb-20">
+        <div class="bg-white shadow-xl rounded-lg overflow-hidden">
+            <div class="p-8 sm:p-12">
+                <article class="prose lg:prose-xl prose-indigo mx-auto">
+                    <Content />
+                </article>
+
+                <footer class="mt-12 pt-8 border-t border-gray-100 flex items-center justify-between">
+                     <a href="/blog" class="text-indigo-600 hover:text-indigo-800 font-medium flex items-center group">
+                        <svg class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        Back to Blog
+                    </a>
+                    
+                    {post.data.tags && (
+                        <div class="flex space-x-2">
+                            {post.data.tags.map((tag: string) => (
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                    #{tag}
+                                </span>
+                            ))}
+                        </div>
+                    )}
+                </footer>
+            </div>
+        </div>
     </div>
 </Layout>

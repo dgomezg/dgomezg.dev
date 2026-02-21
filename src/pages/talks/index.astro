@@ -1,0 +1,66 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const talks = await getCollection('talks');
+const sortedTalks = talks.sort((a, b) => new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf());
+---
+
+<Layout title="Talks - David Gomez G.">
+    <div class="relative bg-gray-900 mb-8 overflow-hidden h-96">
+        <div class="absolute inset-0">
+             <img class="w-full h-full object-cover object-[0%_80%] opacity-80" src="/talks-header-2.jpg" alt="Speaking at Codemotion Madrid 2023" />
+            <div class="absolute inset-0 bg-gray-900 mix-blend-multiply opacity-50" aria-hidden="true"></div>
+        </div>
+        <div class="relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8 text-center h-full flex flex-col justify-center">
+            <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">Speaking</h1>
+            <p class="mt-6 text-xl text-indigo-100 max-w-3xl mx-auto">
+                Sharing knowledge and experiences with the community.
+            </p>
+        </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+            <h2 class="text-3xl font-bold text-gray-900">Available Talks</h2>
+            <div class="mt-4 md:mt-0 flex space-x-4">
+                <a href="/talks" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors font-medium text-sm">Available Talks</a>
+                <a href="/talks/conferences" class="px-4 py-2 bg-white text-gray-700 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors font-medium text-sm">Conference History</a>
+            </div>
+        </div>
+
+        <div class="grid gap-6 lg:grid-cols-2">
+            {sortedTalks.map((talk) => (
+                <div class="bg-white overflow-hidden shadow rounded-lg hover:shadow-lg transition-shadow duration-300 border-l-4 border-indigo-500 flex flex-col h-full">
+                    <div class="px-4 py-5 sm:p-6 flex-grow">
+                        <div class="flex items-center justify-between mb-2">
+                             <span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${talk.data.language === 'en' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}`}>
+                                {talk.data.language === 'en' ? 'English' : 'Español'}
+                            </span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">{talk.data.title}</h3>
+                        <p class="text-sm text-gray-600 mb-4 line-clamp-3">{talk.data.summary}</p>
+                    </div>
+                    
+                    <div class="bg-gray-50 px-4 py-4 sm:px-6 flex items-center justify-between">
+                        <div class="flex space-x-3">
+                            {talk.data.slides && (
+                                <a href={talk.data.slides} target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                                    <svg class="mr-1.5 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 011.414.586l4 4a1 1 0 01.586 1.414V19a2 2 0 01-2 2z"></path></svg>
+                                    Slides
+                                </a>
+                            )}
+                             {talk.data.video && (
+                                <a href={talk.data.video} target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-sm font-medium text-red-600 hover:text-red-500">
+                                    <svg class="mr-1.5 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    Video
+                                </a>
+                            )}
+                        </div>
+                        <span class="text-xs text-gray-400">First presented: {new Date(talk.data.date).getFullYear()}</span>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+</Layout>
